@@ -1,0 +1,106 @@
+
+#define F_CPU 1000000
+#include <avr/io.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
+
+#include "lcd.h"
+
+uint16_t a =0;
+uint16_t b =0;
+
+int main(void)
+{
+	
+	
+	TCCR1B |= (1<<CS10) | (1<<CS12);  //Prescaling for timer 1 of 16 bits de 1024, maximo valor alcanzar 65535
+	 //TCCR1B |= 1<<CS10 | 1<<CS11 | 1<<WGM12; //CTC Mode Clear timer on compare
+	 //TIMSK1 |= 1<<OCIE1A; //Enable timers interrupt (timer mask)
+	 //OCR1A = 15624; //Output compare register 1A
+	
+	
+	DDRB &= ~(1 << PINB1);
+	PORTB |= (1 << PINB1);
+	
+	DDRB &= ~(1 << PINB3);
+	PORTB |= (1 << PINB3);
+	
+	DDRD &= ~(1 << PIND2);
+	PORTD |= (1 << PIND2);
+	
+	
+	
+	
+
+
+   LCDInit(LS_NONE);
+   LCDClear();
+   
+   
+    while (1) 
+    {
+		LCDWriteIntXY(0,0,a,3);
+		
+		if (((PINB & (1 << PINB1)) == 0)) //|| ((PINB & (1 << PINB1)) == 0) || ((PINB & (1 << PINB3)) == 0) || ((PINB & (1 << PINB4)) == 0))		// equivalent to if ((PINB & (1 << PB0)) == 0 ,  (!(PINB & (1 << 0))	//(bit_is_clear(PINB, PB1))
+		{
+		
+			if (TCNT1 > 200){
+				TCNT1 = 0;
+				a = a + 1;
+				LCDWriteIntXY(0,0,a,3);
+				
+				
+				//if (a >= 10 ){
+					//a = 0;
+					//b = b + 1;
+					//LCDWriteIntXY(0,1,b,3);
+					
+				//}
+			}
+		
+		}
+	
+	if (((PIND & (1 << PIND2)) == 0)) //|| ((PINB & (1 << PINB1)) == 0) || ((PINB & (1 << PINB3)) == 0) || ((PINB & (1 << PINB4)) == 0))		// equivalent to if ((PINB & (1 << PB0)) == 0 ,  (!(PINB & (1 << 0))	//(bit_is_clear(PINB, PB1))
+	{
+		
+		if (TCNT1 > 200){
+			TCNT1 = 0;
+			a = a - 1;
+			LCDWriteIntXY(0,0,a,3);
+	
+	
+			}
+		}
+		
+		if (((PINB & (1 << PINB3)) == 0)) //|| ((PINB & (1 << PINB1)) == 0) || ((PINB & (1 << PINB3)) == 0) || ((PINB & (1 << PINB4)) == 0))		// equivalent to if ((PINB & (1 << PB0)) == 0 ,  (!(PINB & (1 << 0))	//(bit_is_clear(PINB, PB1))
+		{
+			
+			
+				LCDWriteIntXY(10,0,a,3);
+				
+		
+			}
+		}
+	}
+
+		
+		//if (((PINB & (1 << PINB1)) == 0)) //|| ((PINB & (1 << PINB1)) == 0) || ((PINB & (1 << PINB3)) == 0) || ((PINB & (1 << PINB4)) == 0))		// equivalent to if ((PINB & (1 << PB0)) == 0 ,  (!(PINB & (1 << 0))	//(bit_is_clear(PINB, PB1))
+		//{
+			//
+			//LCDWriteIntXY(0,0,timer1,3);
+			//
+		//}
+		//else
+		//{
+			//LCDWriteIntXY(0,1,timer1,3);
+		//}
+		
+		
+			
+			
+		
+		
+		
+
+
+
